@@ -1,0 +1,28 @@
+.wrapper {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 20px;
+}
+
+.page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20px;
+    height: 20px;
+    background-color: rgb(54, 120, 182);
+    color: white;
+    cursor: pointer;
+}
+
+.active {
+    background-color: white;
+    color: rgb(54, 120, 182);
+    border: 2px solid rgb(54, 120, 182);
+    cursor: default
+}

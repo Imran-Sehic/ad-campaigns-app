@@ -1,0 +1,33 @@
+.wrapper {
+    display: grid;
+    grid-template-columns: 0.2fr 1fr 1fr 1fr 0.2fr;
+    gap: 5px;
+    width: 100%;
+}
+
+.wrapper > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid rgb(54, 120, 182);
+    border-radius: 5px;
+}
+
+.status {
+    display: flex;
+    gap: 5px;
+    cursor: pointer;
+}
+
+.status:hover {
+    opacity: 0.5;
+}
+
+.date {
+    font-size: 12px;
+}
+
+.delete:hover {
+    opacity: 0.5;
+    cursor: pointer;
+}
