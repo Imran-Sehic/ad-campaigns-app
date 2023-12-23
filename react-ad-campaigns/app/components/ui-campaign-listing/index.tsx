@@ -1,7 +1,7 @@
 "use client";
 import { deleteCampaignQuery, updateCampaignQuery } from "@/app/queries";
 import useCampaignStore from "@/app/store";
-import { Campaign, PromptType } from "@/app/types";
+import { Campaign, PromptType, ErrorQueryResponse } from "@/app/types";
 import { UIButton } from "@/app/ui-kit/ui-button";
 import { UIModal } from "@/app/ui-kit/ui-modal";
 import { UIFormContent } from "@/app/ui-kit/ui-modal/ui-form-content";
@@ -14,6 +14,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { UICampaign } from "../ui-campaign";
 import { NoCampaigns } from "./components/noCampaigns";
 import styles from "./ui-campaign-listing.module.css";
+import { notifyError, notifySuccess } from "@/app/utils/notifications";
 
 interface UICampaignListingInterface {
   listing: Campaign[];
@@ -45,9 +46,6 @@ export const UICampaignListing: React.FC<UICampaignListingInterface> = ({
     type: "delete",
   });
 
-  const notifySuccess = () => toast.success("Action succeded!");
-  const notifyError = () => toast.error("Action failed!");
-
   useEffect(() => {
     setCampaigns(listing);
     setIsLoading(false);
@@ -61,7 +59,7 @@ export const UICampaignListing: React.FC<UICampaignListingInterface> = ({
     switch (type) {
       case "delete":
         const resp = await deleteCampaignQuery(data.id);
-        if (resp.message) {
+        if (!('error' in resp)) {
           notifySuccess();
           deleteCampaign(data.id);
         } else notifyError();
@@ -70,9 +68,9 @@ export const UICampaignListing: React.FC<UICampaignListingInterface> = ({
       case "update":
         if (data.payload) {
           const resp = await updateCampaignQuery(data.id, data.payload);
-          if (resp.id) {
+          if (!('error' in resp)) {
             notifySuccess();
-            updateCampaign(data.payload);
+            updateCampaign(resp);
           } else notifyError();
           setPromptDisabled(false);
         }

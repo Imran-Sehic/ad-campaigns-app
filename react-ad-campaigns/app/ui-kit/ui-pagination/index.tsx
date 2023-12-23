@@ -18,8 +18,8 @@ export const UIPagination: React.FC<UIPaginationInterface> = ({
   const { setCampaigns } = useCampaignStore();
   const paginate = async (page: number) => {
     setActivePage(page);
-    const { data } = await getCampaignsQuery(page);
-    setCampaigns(data);
+    const resp = await getCampaignsQuery(page);
+    if (!("error" in resp)) setCampaigns(resp.data);
   };
   return (
     <div className={styles.wrapper}>

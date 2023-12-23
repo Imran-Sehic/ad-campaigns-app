@@ -18,6 +18,10 @@ export type CampaignsQueryResponse = {
   limit: number;
 };
 
+export type ErrorQueryResponse = {
+  error: string;
+};
+
 export enum StatusEnum {
   ACTIVE = "active",
   PAUSED = "paused",

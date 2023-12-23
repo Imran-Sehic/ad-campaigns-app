@@ -42,7 +42,7 @@ export const UIFormContent: React.FC<UIFormContentInterface> = ({
 
     setFormDisabled(true);
     const data = await addCampaignQuery(campaign);
-    if (data) {
+    if (!('error' in data)) {
       // we don't want to add to the state campaigns beyond page limit, instead we increase page number
       if (totalRecords % limit == 0)
         setTotalPages((totalPages) => totalPages + 1);

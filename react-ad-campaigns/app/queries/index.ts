@@ -1,8 +1,8 @@
-import { Campaign, CampaignsQueryResponse } from "../types";
+import { Campaign, CampaignsQueryResponse, ErrorQueryResponse } from "../types";
 
 export const getCampaignsQuery = async (
   page: number
-): Promise<CampaignsQueryResponse> => {
+): Promise<CampaignsQueryResponse | ErrorQueryResponse> => {
   const data = await fetch(`http://localhost:8080/campaigns?page=${page}`, {
     headers: {
       cache: "no-store",
@@ -10,14 +10,16 @@ export const getCampaignsQuery = async (
     method: "GET",
   });
 
-  const campaigns = (await data.json()) as CampaignsQueryResponse;
+  const campaigns = (await data.json()) as
+    | CampaignsQueryResponse
+    | ErrorQueryResponse;
 
   return campaigns;
 };
 
 export const addCampaignQuery = async (
   campaign: Partial<Campaign>
-): Promise<Campaign> => {
+): Promise<Campaign | ErrorQueryResponse> => {
   const data = await fetch(`http://localhost:8080/campaigns`, {
     method: "POST",
     headers: {
@@ -26,7 +28,7 @@ export const addCampaignQuery = async (
     body: JSON.stringify(campaign),
   });
 
-  const addedCampaign = (await data.json()) as Campaign;
+  const addedCampaign = (await data.json()) as Campaign | ErrorQueryResponse;
 
   return addedCampaign;
 };
@@ -34,7 +36,7 @@ export const addCampaignQuery = async (
 export const updateCampaignQuery = async (
   id: string,
   campaign: Partial<Campaign>
-): Promise<Campaign> => {
+): Promise<Campaign | ErrorQueryResponse> => {
   const data = await fetch(`http://localhost:8080/campaigns/${id}`, {
     method: "PUT",
     headers: {
@@ -43,19 +45,21 @@ export const updateCampaignQuery = async (
     body: JSON.stringify(campaign),
   });
 
-  const updatedCampaign = (await data.json()) as Campaign;
+  const updatedCampaign = (await data.json()) as Campaign | ErrorQueryResponse;
 
   return updatedCampaign;
 };
 
 export const deleteCampaignQuery = async (
   id: string
-): Promise<{ message: string }> => {
+): Promise<{ message: string } | ErrorQueryResponse> => {
   const data = await fetch(`http://localhost:8080/campaigns/${id}`, {
     method: "DELETE",
   });
 
-  const campaigns = (await data.json()) as { message: string };
+  const campaigns = (await data.json()) as
+    | { message: string }
+    | ErrorQueryResponse;
 
   return campaigns;
 };
