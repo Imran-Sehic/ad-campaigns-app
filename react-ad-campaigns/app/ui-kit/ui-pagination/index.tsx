@@ -19,7 +19,6 @@ export const UIPagination: React.FC<UIPaginationInterface> = ({
   const paginate = async (page: number) => {
     setActivePage(page);
     const { data } = await getCampaignsQuery(page);
-    console.log("data", data);
     setCampaigns(data);
   };
   return (
