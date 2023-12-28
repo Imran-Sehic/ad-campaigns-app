@@ -37,4 +37,12 @@
         flex-direction: column;
         gap: 10px
     }
+
+    .listing {
+        overflow-x: scroll;
+    }
+
+    .listing > div {
+        width: 430px
+    }
 }

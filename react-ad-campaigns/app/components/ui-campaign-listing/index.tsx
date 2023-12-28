@@ -1,20 +1,20 @@
 "use client";
 import { deleteCampaignQuery, updateCampaignQuery } from "@/app/queries";
 import useCampaignStore from "@/app/store";
-import { Campaign, PromptType, ErrorQueryResponse } from "@/app/types";
+import { Campaign, PromptType } from "@/app/types";
 import { UIButton } from "@/app/ui-kit/ui-button";
 import { UIModal } from "@/app/ui-kit/ui-modal";
 import { UIFormContent } from "@/app/ui-kit/ui-modal/ui-form-content";
 import { UIPromptContent } from "@/app/ui-kit/ui-modal/ui-prompt-content";
 import { UIPagination } from "@/app/ui-kit/ui-pagination";
 import UISpinner from "@/app/ui-kit/ui-spinner";
+import { notifyError, notifySuccess } from "@/app/utils/notifications";
 import { useEffect, useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { UICampaign } from "../ui-campaign";
 import { NoCampaigns } from "./components/noCampaigns";
 import styles from "./ui-campaign-listing.module.css";
-import { notifyError, notifySuccess } from "@/app/utils/notifications";
 
 interface UICampaignListingInterface {
   listing: Campaign[];
@@ -59,7 +59,7 @@ export const UICampaignListing: React.FC<UICampaignListingInterface> = ({
     switch (type) {
       case "delete":
         const resp = await deleteCampaignQuery(data.id);
-        if (!('error' in resp)) {
+        if (!("error" in resp)) {
           notifySuccess();
           deleteCampaign(data.id);
         } else notifyError();
@@ -68,7 +68,7 @@ export const UICampaignListing: React.FC<UICampaignListingInterface> = ({
       case "update":
         if (data.payload) {
           const resp = await updateCampaignQuery(data.id, data.payload);
-          if (!('error' in resp)) {
+          if (!("error" in resp)) {
             notifySuccess();
             updateCampaign(resp);
           } else notifyError();
@@ -93,7 +93,7 @@ export const UICampaignListing: React.FC<UICampaignListingInterface> = ({
           ></UIButton>
         </p>
         {!isLoading && campaigns.length > 0 && (
-          <>
+          <div className={styles.listing}>
             <div className={styles.listingHeader}>
               <div>N.</div>
               <div>Name</div>
@@ -109,7 +109,7 @@ export const UICampaignListing: React.FC<UICampaignListingInterface> = ({
                 setModalPrompt={setModalPrompt}
               />
             ))}
-          </>
+          </div>
         )}
         {!isLoading && campaigns.length == 0 && <NoCampaigns />}
         {isLoading && (
