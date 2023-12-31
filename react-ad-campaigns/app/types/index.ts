@@ -8,7 +8,7 @@ export type Campaign = {
 export type PromptType = {
   prompt: string;
   data: { id: string; payload?: Campaign };
-  type: "delete" | "update";
+  type: PromptActionType;
 };
 
 export type CampaignsQueryResponse = {
@@ -25,4 +25,9 @@ export type ErrorQueryResponse = {
 export enum StatusEnum {
   ACTIVE = "active",
   PAUSED = "paused",
+}
+
+export enum PromptActionType {
+  UPDATE = "update",
+  DELETE = "delete",
 }

@@ -1,4 +1,9 @@
-import { Campaign, PromptType, StatusEnum } from "@/app/types";
+import {
+  Campaign,
+  PromptActionType,
+  PromptType,
+  StatusEnum,
+} from "@/app/types";
 import StatusIcon from "@/app/ui-kit/icons/statusIcon";
 import DeleteIcon from "@/app/ui-kit/icons/trashBinIcon";
 import { formatDate } from "@/app/utils/formatDate";
@@ -24,7 +29,7 @@ export const UICampaign: React.FC<UICampaignInterface> = ({
   const updatePrompt = (
     prompt: string,
     data: { id: string; payload?: Campaign },
-    type: "delete" | "update"
+    type: PromptActionType
   ) => {
     setModalPrompt({
       prompt,
@@ -54,7 +59,7 @@ export const UICampaign: React.FC<UICampaignInterface> = ({
                 status: isStatusActive ? StatusEnum.PAUSED : StatusEnum.ACTIVE,
               },
             },
-            "update"
+            PromptActionType.UPDATE
           )
         }
       >
@@ -71,7 +76,7 @@ export const UICampaign: React.FC<UICampaignInterface> = ({
           updatePrompt(
             "Do you really want to delete this campaign?",
             { id },
-            "delete"
+            PromptActionType.DELETE
           );
         }}
       >

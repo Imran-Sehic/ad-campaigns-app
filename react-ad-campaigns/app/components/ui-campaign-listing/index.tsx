@@ -1,11 +1,11 @@
 "use client";
-import { deleteCampaignQuery, updateCampaignQuery } from "@/app/queries";
 import useCampaignStore from "@/app/store";
-import { Campaign, PromptType } from "@/app/types";
+import { Campaign, PromptActionType, PromptType } from "@/app/types";
 import { UIButton } from "@/app/ui-kit/ui-button";
 import { UIModal } from "@/app/ui-kit/ui-modal";
 import { UIFormContent } from "@/app/ui-kit/ui-modal/ui-form-content";
 import { UIPromptContent } from "@/app/ui-kit/ui-modal/ui-prompt-content";
+import { executePrompt } from "@/app/ui-kit/ui-modal/ui-prompt-content/utils/acceptActions";
 import { UIPagination } from "@/app/ui-kit/ui-pagination";
 import UISpinner from "@/app/ui-kit/ui-spinner";
 import { notifyError, notifySuccess } from "@/app/utils/notifications";
@@ -43,40 +43,13 @@ export const UICampaignListing: React.FC<UICampaignListingInterface> = ({
   const [modalPrompt, setModalPrompt] = useState<PromptType>({
     prompt: "",
     data: { id: "" },
-    type: "delete",
+    type: PromptActionType.DELETE,
   });
 
   useEffect(() => {
     setCampaigns(listing);
     setIsLoading(false);
   }, [listing, setCampaigns]);
-
-  const executePrompt = async (
-    type: "delete" | "update",
-    data: { id: string; payload?: Campaign }
-  ) => {
-    setPromptDisabled(true);
-    switch (type) {
-      case "delete":
-        const resp = await deleteCampaignQuery(data.id);
-        if (!("error" in resp)) {
-          notifySuccess();
-          deleteCampaign(data.id);
-        } else notifyError();
-        setPromptDisabled(false);
-        setIsPromptModalOpen(false);
-      case "update":
-        if (data.payload) {
-          const resp = await updateCampaignQuery(data.id, data.payload);
-          if (!("error" in resp)) {
-            notifySuccess();
-            updateCampaign(resp);
-          } else notifyError();
-          setPromptDisabled(false);
-        }
-        setIsPromptModalOpen(false);
-    }
-  };
 
   return (
     <>
@@ -129,7 +102,16 @@ export const UICampaignListing: React.FC<UICampaignListingInterface> = ({
         <UIModal onClose={() => setIsPromptModalOpen(false)}>
           <UIPromptContent
             prompt={modalPrompt.prompt}
-            accept={() => executePrompt(modalPrompt.type, modalPrompt.data)}
+            accept={() =>
+              executePrompt(
+                modalPrompt.type,
+                modalPrompt.data,
+                setPromptDisabled,
+                setIsPromptModalOpen,
+                updateCampaign,
+                deleteCampaign
+              )
+            }
             decline={() => {
               setIsPromptModalOpen(false);
             }}
